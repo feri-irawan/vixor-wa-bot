@@ -13,12 +13,12 @@ const openai = new OpenAIApi(configuration);
 
 const dir = resolve("data", "ai_messages.json");
 
-if (!existsSync(dir)) writeFileSync(dir, "{}", "utf-8");
-
 /**
  * Mengambil pesan dari file
  */
 function getMessages(id?: string): any {
+  if (!existsSync(dir)) writeFileSync(dir, "{}", "utf-8");
+
   let messages = JSON.parse(readFileSync(dir, "utf-8"));
   return id ? messages[id] : messages;
 }
