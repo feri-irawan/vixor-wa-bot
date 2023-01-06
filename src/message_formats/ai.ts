@@ -141,12 +141,15 @@ export default async function ai(sock: WASocket, user: any, message: any) {
         if (quotedMessage) {
           log("Ada pesan yang dibalas dan bot ditag di dalam pesan");
 
-          const conversation = quotedMessage?.conversation || "Halo bot";
+          const conversation = (
+            quotedMessage?.conversation ||
+            quotedMessage?.extendedTextMessage?.text
+          ).replaceAll(botId.short, "");
           let prompt = `A:${conversation}\nQ:${userText}\nA:`;
 
           if (message.message?.extendedTextMessage?.text === botId.short) {
             log("Ada pesan yang dibalas dengan text yang sama dengan id bot");
-            prompt = `Q:${conversation}\nA:`;
+            prompt = `Q:${conversation || "Halo bot"}\nA:`;
           }
 
           log(prompt);
