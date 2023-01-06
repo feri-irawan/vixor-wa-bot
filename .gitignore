@@ -1,0 +1,4 @@
+node_modules/
+wabot_auth_state/
+data/*.json
+.env

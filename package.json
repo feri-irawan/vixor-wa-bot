@@ -1,0 +1,22 @@
+{
+  "name": "vixor-wa-bot",
+  "version": "1.0.0",
+  "description": "VixorBot for WA",
+  "main": "src/index.js",
+  "author": "Feri Irawan",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@adiwajshing/baileys": "^5.0.0",
+    "@types/node": "^18.11.18",
+    "axios": "^1.2.2",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.0.3",
+    "global": "^4.4.0",
+    "openai": "^3.1.0",
+    "qrcode-terminal": "^0.12.0",
+    "ts-node": "^10.9.1"
+  }
+}
