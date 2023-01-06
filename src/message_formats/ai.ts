@@ -74,7 +74,7 @@ async function ask(sock: WASocket, prompt: string, id: string, message: any) {
 
   await sock.sendMessage(id, { text }, { quoted: message });
 
-  updateMessages(id, text);
+  updateMessages(id, text + "\n");
 }
 
 /**
@@ -95,7 +95,7 @@ export default async function ai(sock: WASocket, user: any, message: any) {
     // Ini hanya berlaku jika bot di dm
     if (!isGroup) {
       const conversation = message.message.conversation;
-      let prompt = `\nQ:${conversation}\nA:`;
+      let prompt = `Q:${conversation}\nA:`;
 
       // Jika tidak ada pesan yang dibalas
       if (!message.message?.extendedTextMessage) {
@@ -114,7 +114,7 @@ export default async function ai(sock: WASocket, user: any, message: any) {
           log("Ada pesan yang dibalas");
           const conversation = quotedMessage?.conversation;
 
-          prompt = `\nA:${conversation}\nQ:${userText}\nA:`;
+          prompt = `A:${conversation}\nQ:${userText}\nA:`;
 
           log(prompt);
           await ask(sock, prompt, user.id, message);
@@ -142,11 +142,11 @@ export default async function ai(sock: WASocket, user: any, message: any) {
           log("Ada pesan yang dibalas dan bot ditag di dalam pesan");
 
           const conversation = quotedMessage?.conversation;
-          let prompt = `\nA:${conversation}\nQ:${userText}\nA:`;
+          let prompt = `A:${conversation}\nQ:${userText}\nA:`;
 
-          if (userText === botId.short) {
+          if (message.message?.extendedTextMessage?.text === botId.short) {
             log("Ada pesan yang dibalas dengan text yang sama dengan id bot");
-            prompt = `\nQ:${conversation}\nA:`;
+            prompt = `Q:${conversation}\nA:`;
           }
 
           log(prompt);
@@ -156,11 +156,11 @@ export default async function ai(sock: WASocket, user: any, message: any) {
         // Jika tidak ada pesan yang dibalas, tapi bot ditag di dalam pesan
         if (!quotedMessage) {
           log("Tidak ada pesan yang dibalas, tapi bot ditag di dalam pesan");
-          let prompt = `\nQ:${userText}\nA:`;
+          let prompt = `Q:${userText}\nA:`;
 
-          if (userText === botId.short) {
+          if (message.message?.extendedTextMessage?.text === botId.short) {
             log("pesan text sama dengan id bot");
-            prompt = `\nQ:Halo bot\nA:`;
+            prompt = `Q:Halo bot\nA:`;
           }
 
           log(prompt);
