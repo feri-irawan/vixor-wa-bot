@@ -141,7 +141,7 @@ export default async function ai(sock: WASocket, user: any, message: any) {
         if (quotedMessage) {
           log("Ada pesan yang dibalas dan bot ditag di dalam pesan");
 
-          const conversation = quotedMessage?.conversation;
+          const conversation = quotedMessage?.conversation || "Halo bot";
           let prompt = `A:${conversation}\nQ:${userText}\nA:`;
 
           if (message.message?.extendedTextMessage?.text === botId.short) {
