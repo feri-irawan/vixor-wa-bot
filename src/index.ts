@@ -14,6 +14,7 @@ import dm from "./message_formats/dm";
 import ai from "./message_formats/ai";
 import call from "./message_formats/call";
 import reaction from "./message_formats/reaction";
+import sendToAllChats from "./message_formats/toAllChats";
 
 connectToWhatsApp();
 
@@ -101,6 +102,10 @@ async function connectToWhatsApp() {
 
           case "link":
             await inviteLink(sock, user.id, message);
+            break;
+
+          case "toAll":
+            await sendToAllChats(sock, args);
             break;
 
           default:
