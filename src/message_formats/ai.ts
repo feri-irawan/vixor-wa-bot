@@ -16,7 +16,7 @@ const dir = resolve("data", "ai_messages.json");
 /**
  * Mengambil pesan dari file
  */
-function getMessages(id?: string): any {
+export function getMessages(id?: string): any {
   if (!existsSync(dir)) writeFileSync(dir, "{}", "utf-8");
 
   let messages = JSON.parse(readFileSync(dir, "utf-8"));

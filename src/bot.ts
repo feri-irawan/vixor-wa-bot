@@ -1,4 +1,5 @@
 import { WASocket } from "@adiwajshing/baileys";
+import { getMessages } from "./message_formats/ai";
 
 export function getBotId(sock: WASocket) {
   const bot = sock.user;
@@ -8,4 +9,9 @@ export function getBotId(sock: WASocket) {
     short: "@" + id,
     long: id + "@s.whatsapp.net",
   };
+}
+
+export function getAllChatsJid() {
+  const chats = getMessages();
+  return Object.keys(chats);
 }
