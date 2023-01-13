@@ -58,7 +58,7 @@ async function ask(sock: WASocket, prompt: string, id: string, message: any) {
   const completion = await openai.createCompletion({
     model: "text-davinci-003",
     prompt: messages.prompt,
-    max_tokens: 150,
+    max_tokens: 200,
     temperature: 0,
   });
 
