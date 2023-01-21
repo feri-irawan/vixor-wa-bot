@@ -19,7 +19,9 @@ import sendToAllChats from "./message_formats/toAllChats";
 connectToWhatsApp();
 
 async function connectToWhatsApp() {
-  const { state, saveCreds } = await useMultiFileAuthState("wabot_auth_state");
+  const { state, saveCreds } = await useMultiFileAuthState(
+    process.env.WA_STATE
+  );
 
   const sock = makeWASocket({
     auth: state,
