@@ -1,4 +1,5 @@
 import { WASocket } from "@adiwajshing/baileys";
+import { getBotId } from "../bot";
 
 export async function inviteLink(sock: WASocket, id: string, message: any) {
   const inviteCode = await sock.groupInviteCode(id);
@@ -51,4 +52,38 @@ export async function tagAll(sock: WASocket, message: any) {
   //   text: participants.map(({ text }) => text).join(" "),
   //   mentions: participants.map(({ userId }) => userId),
   // });
+}
+
+export async function kickUser(
+  sock: WASocket,
+  id: string,
+  args: string,
+  message: any
+) {
+  if (args.startsWith("@")) {
+    // User yang akan dikick
+    const userTarget = args.split(" ").map((v) => v.replace("@", ""))[0];
+
+    // Jika yang ditarget adalah admin maka batalkan
+    if (userTarget === getBotId(sock).short.slice(1)) return;
+
+    // Mendapatkan member group
+    const participants = await sock
+      .groupMetadata(id)
+      .then(({ participants }) => participants);
+
+    // Cek apakah yang mengguakan perintah adalah admin
+    const isAdmin = participants.find(
+      ({ id }) => id === message.key.participant
+    ).admin;
+
+    // List users yang akan dikick
+    const usersWillRemove = participants
+      .filter(({ id }) => id.includes(userTarget))
+      .map(({ id }) => id);
+
+    if (isAdmin) {
+      await sock.groupParticipantsUpdate(id, usersWillRemove, "remove");
+    }
+  }
 }

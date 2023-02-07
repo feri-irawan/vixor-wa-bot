@@ -8,7 +8,7 @@ import makeWASocket, {
 import { Boom } from "@hapi/boom";
 import { log } from "console";
 import sendHelp from "./message_formats/help";
-import { inviteLink, tagAll } from "./message_formats/group";
+import { inviteLink, kickUser, tagAll } from "./message_formats/group";
 import { createTextSticker, imageSearch } from "./message_formats/images";
 import dm from "./message_formats/dm";
 import ai from "./message_formats/ai";
@@ -108,6 +108,10 @@ async function connectToWhatsApp() {
 
           case "toAll":
             await sendToAllChats(sock, args);
+            break;
+
+          case "kick":
+            await kickUser(sock, user.id, args, message);
             break;
 
           default:
