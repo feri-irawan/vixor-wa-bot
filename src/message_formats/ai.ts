@@ -52,29 +52,33 @@ function updateMessages(id: string, message: string) {
  * Berkomunikasi dengan AI
  */
 async function ask(sock: WASocket, prompt: string, id: string, message: any) {
-  updateMessages(id, prompt);
-  const messages = getMessages(id);
+  try {
+    updateMessages(id, prompt);
+    const messages = getMessages(id);
 
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: messages.prompt,
-    max_tokens: 200,
-    temperature: 0,
-  });
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: messages.prompt,
+      max_tokens: 200,
+      temperature: 0,
+    });
+ 
+    const text = completion.data.choices[0].text.trim();
+    if (text.length === 0) {
+      await sock.sendMessage(
+        id,
+        { text: "Yah, saya tidak tau." },
+        { quoted: message }
+      );
+      return;
+    }
 
-  const text = completion.data.choices[0].text.trim();
-  if (text.length === 0) {
-    await sock.sendMessage(
-      id,
-      { text: "Yah, saya tidak tau." },
-      { quoted: message }
-    );
-    return;
+    await sock.sendMessage(id, { text }, { quoted: message });
+
+    updateMessages(id, text + "\n");
+  } catch (err) {
+    console.log(err.toJSON());
   }
-
-  await sock.sendMessage(id, { text }, { quoted: message });
-
-  updateMessages(id, text + "\n");
 }
 
 /**
