@@ -23,8 +23,11 @@ Link grup ini
 Bertanya dengan robot AI (Kecerdasan Buatan)
    
 > *@all*
-Tag semua anggota grup
+Tag semua anggota grup (balas satu pesan)
 
+*Khusus Admin*
+> *!kick* [tag kontaknya]
+Mengeluarkan member group
 `;
 
   await sock.sendMessage(id, { text });

@@ -62,7 +62,7 @@ async function ask(sock: WASocket, prompt: string, id: string, message: any) {
       max_tokens: 200,
       temperature: 0,
     });
- 
+
     const text = completion.data.choices[0].text.trim();
     if (text.length === 0) {
       await sock.sendMessage(
@@ -86,8 +86,6 @@ async function ask(sock: WASocket, prompt: string, id: string, message: any) {
  */
 export default async function ai(sock: WASocket, user: any, message: any) {
   const botId = getBotId(sock);
-
-  log(botId);
 
   // Gunakan AI hanya jika text tidak termasuk dalam bentuk command
   if (
