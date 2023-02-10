@@ -11,7 +11,7 @@ import sendHelp from "./message_formats/help";
 import { inviteLink, kickUser, tagAll } from "./message_formats/group";
 import { createTextSticker, imageSearch } from "./message_formats/images";
 import dm from "./message_formats/dm";
-import ai from "./message_formats/ai";
+import ai, { clearPromptHistory } from "./message_formats/ai";
 import call from "./message_formats/call";
 import reaction from "./message_formats/reaction";
 import sendToAllChats from "./message_formats/toAllChats";
@@ -112,6 +112,10 @@ async function connectToWhatsApp() {
 
           case "kick":
             await kickUser(sock, user.id, args, message);
+            break;
+
+          case "clear":
+            await clearPromptHistory(sock, user.id);
             break;
 
           default:

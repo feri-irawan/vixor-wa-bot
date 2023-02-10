@@ -25,6 +25,9 @@ Bertanya dengan robot AI (Kecerdasan Buatan)
 > *@all*
 Tag semua anggota grup (balas satu pesan)
 
+> *!clear*
+Membersihkan ingatan Bot
+
 *Khusus Admin*
 > *!kick* [tag kontaknya]
 Mengeluarkan member group

@@ -49,6 +49,20 @@ function updateMessages(id: string, message: string) {
 }
 
 /**
+ * clear prompt history
+ */
+export async function clearPromptHistory(sock: WASocket, id: string) {
+  await sock.sendMessage(id, { text: "Membersihkan ingatan..." });
+
+  let data = getMessages();
+  delete data[id];
+  writeFileSync(dir, JSON.stringify(data, null, 2), "utf-8");
+
+  await new Promise((resolve) => setTimeout(() => resolve(true), 5000));
+  await sock.sendMessage(id, { text: "Aduh.. kepalaku terasa agak aneh 😵‍💫" });
+}
+
+/**
  * Berkomunikasi dengan AI
  */
 async function ask(sock: WASocket, prompt: string, id: string, message: any) {
@@ -77,7 +91,7 @@ async function ask(sock: WASocket, prompt: string, id: string, message: any) {
 
     updateMessages(id, text + "\n");
   } catch (err) {
-    console.log(err.toJSON());
+    console.log(err);
   }
 }
 
