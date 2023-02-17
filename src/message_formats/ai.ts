@@ -67,12 +67,20 @@ export async function clearPromptHistory(sock: WASocket, id: string) {
  */
 async function ask(sock: WASocket, prompt: string, id: string, message: any) {
   try {
+    sock.sendPresenceUpdate("composing", id);
+
     updateMessages(id, prompt);
     const messages = getMessages(id);
 
+    const initData = `nama: VixorBot
+oleh: Feri Irawan
+pada: 26/12/2022\n\n`;
+
+    log(initData + messages.prompt.slice(-2048 - initData.length));
+
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: messages.prompt.slice(-2048),
+      prompt: initData + messages.prompt.slice(-2048 - initData.length),
       max_tokens: 200,
       temperature: 0,
     });

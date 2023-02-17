@@ -61,76 +61,97 @@ async function connectToWhatsApp() {
     // log(JSON.stringify(m, null, 2));
 
     // Message
-    const message = m.messages[0];
+    for (let message of m.messages) {
+      // const message = m.messages[0];
 
-    // User
-    const user = {
-      id: message.key.remoteJid!,
-      text:
-        message.message?.conversation ||
-        message.message?.extendedTextMessage?.text ||
-        "",
-    };
+      // User
+      const user = {
+        id: message.key.remoteJid!,
+        text:
+          message.message?.conversation ||
+          message.message?.extendedTextMessage?.text ||
+          "",
+      };
 
-    if (m.type === "notify" && !message.key.fromMe) {
-      // Ping
-      if (user.text.toLowerCase() === "ping")
-        await sock.sendMessage(user.id, { text: "Pong!" }, { quoted: message });
-
-      // Tag semua member grup
-      if (user.text.toLowerCase().includes("@all")) tagAll(sock, message);
-
-      // Dengan commands
-      if (user.text.startsWith("!")) {
-        const command = user.text.split(" ").slice(0, 1)[0].slice(1);
-        const args = user.text.slice(command.length + 1).trim();
-
-        switch (command) {
-          case "help":
-            await sendHelp(sock, user.id);
-            break;
-
-          case "image":
-            await imageSearch(sock, user.id, args);
-            break;
-
-          case "textSticker":
-            await createTextSticker(sock, user.id, args, message);
-            break;
-
-          case "dm":
-            await dm(sock, args, user.id, message);
-            break;
-
-          case "link":
-            await inviteLink(sock, user.id, message);
-            break;
-
-          case "toAll":
-            await sendToAllChats(sock, args);
-            break;
-
-          case "kick":
-            await kickUser(sock, user.id, args, message);
-            break;
-
-          case "clear":
-            await clearPromptHistory(sock, user.id);
-            break;
-
-          default:
-            break;
+      // if (m.type === "notify" && !message.key.fromMe) {
+      if (!message.key.fromMe) {
+        // Ping
+        if (user.text.toLowerCase() === "ping") {
+          sock.sendPresenceUpdate("composing", user.id);
+          
+          await sock.sendMessage(
+            user.id,
+            { text: "Pong!" },
+            { quoted: message }
+          );
         }
+        
+        // Tag semua member grup
+        if (user.text.toLowerCase().includes("@all")) {
+          sock.sendPresenceUpdate("composing", user.id);
+          
+          tagAll(sock, message);
+        }
+
+        // Dengan commands
+        if (user.text.startsWith("!")) {
+          sock.sendPresenceUpdate("composing", user.id);
+
+          const command = user.text.split(" ").slice(0, 1)[0].slice(1);
+          const args = user.text.slice(command.length + 1).trim();
+
+          switch (command) {
+            case "help":
+              await sendHelp(sock, user.id);
+              break;
+
+            case "image":
+              await imageSearch(sock, user.id, args);
+              break;
+
+            case "textSticker":
+              await createTextSticker(sock, user.id, args, message);
+              break;
+
+            case "dm":
+              await dm(sock, args, user.id, message);
+              break;
+
+            case "link":
+              await inviteLink(sock, user.id, message);
+              break;
+
+            case "toAll":
+              await sendToAllChats(sock, args);
+              break;
+
+            case "kick":
+              await kickUser(sock, user.id, args, message);
+              break;
+
+            case "clear":
+              await clearPromptHistory(sock, user.id);
+              break;
+
+            default:
+              break;
+          }
+        }
+
+        await ai(sock, user, message);
       }
 
-      await ai(sock, user, message);
+      const dontDeleteFrom = process.env.DONT_REMOVE_USER_CHAT.split(",").map(
+        (v) => v + "@s.whatsapp.net"
+      );
+
+      if (!dontDeleteFrom.includes(user.id))
+        await sock.chatModify(
+          { delete: true, lastMessages: [message] },
+          user.id
+        );
+
+      sock.sendPresenceUpdate("paused", user.id);
     }
-
-    const dontDeleteFrom = process.env.DONT_REMOVE_USER_CHAT.split(",").map(
-      (v) => v + "@s.whatsapp.net"
-    );
-
-    if (!dontDeleteFrom.includes(user.id))
-      await sock.chatModify({ delete: true, lastMessages: [message] }, user.id);
   });
 }
