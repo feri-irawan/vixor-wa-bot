@@ -74,22 +74,22 @@ async function connectToWhatsApp() {
       };
 
       // if (m.type === "notify" && !message.key.fromMe) {
-      if (!message.key.fromMe) {
+      if (!message.key.fromMe && user.text) {
         // Ping
         if (user.text.toLowerCase() === "ping") {
           sock.sendPresenceUpdate("composing", user.id);
-          
+
           await sock.sendMessage(
             user.id,
             { text: "Pong!" },
             { quoted: message }
           );
         }
-        
+
         // Tag semua member grup
         if (user.text.toLowerCase().includes("@all")) {
           sock.sendPresenceUpdate("composing", user.id);
-          
+
           tagAll(sock, message);
         }
 
