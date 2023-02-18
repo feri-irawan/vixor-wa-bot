@@ -73,8 +73,11 @@ async function ask(sock: WASocket, prompt: string, id: string, message: any) {
     const messages = getMessages(id);
 
     const initData = `nama: VixorBot
-oleh: Feri Irawan
-pada: 26/12/2022\n\n`;
+dibuat oleh: Feri Irawan
+dibuat pada: 26/12/2022
+sekarang tanggal: ${new Date().toJSON()}
+
+`;
 
     log(initData + messages.prompt.slice(-2048 - initData.length));
 
