@@ -15,6 +15,7 @@ import ai, { clearPromptHistory } from "./message_formats/ai";
 import call from "./message_formats/call";
 import reaction from "./message_formats/reaction";
 import sendToAllChats from "./message_formats/toAllChats";
+import donate from "./message_formats/donate";
 
 connectToWhatsApp();
 
@@ -103,6 +104,10 @@ async function connectToWhatsApp() {
           switch (command) {
             case "help":
               await sendHelp(sock, user.id);
+              break;
+
+            case "donate":
+              await donate(sock, user.id);
               break;
 
             case "image":

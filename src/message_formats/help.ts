@@ -10,6 +10,9 @@ Berikut perintah yang saya pahami:
 > *!help*
 Minta bantuan
 
+> *!donate*
+Kirim tip untuk bot 💸
+
 > *!image* [kata kunci]
 Mencari gambar
 
