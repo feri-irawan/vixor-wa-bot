@@ -1,5 +1,6 @@
 node_modules/
 wabot_auth_state/
 *state/
+*STATE/
 data/*.json
 .env

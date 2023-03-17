@@ -6,7 +6,7 @@ import { resolve } from "path";
 import { getBotId } from "../bot";
 
 const configuration = new Configuration({
-  apiKey: process.env.OPEN_AI_TOKEN,
+  apiKey: process.env.OPENAI_TOKEN,
 });
 
 const openai = new OpenAIApi(configuration);
