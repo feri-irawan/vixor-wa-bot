@@ -20,9 +20,7 @@ import donate from "./message_formats/donate";
 connectToWhatsApp();
 
 async function connectToWhatsApp() {
-  const { state, saveCreds } = await useMultiFileAuthState(
-    process.env.WA_STATE
-  );
+  const { state, saveCreds } = await useMultiFileAuthState("WA_STATE");
 
   const sock = makeWASocket({
     auth: state,
